@@ -171,7 +171,7 @@ service_app_links() {
 
 service_backup() {
   declare desc="Creates a backup of a service to an existing s3 bucket"
-  declare SERVICE="$1" BUCKET_NAME="$2" USE_IAM_OPTIONAL_FLAG="$3"
+  declare SERVICE="$1" DATABASE_NAME="$2" BUCKET_NAME="$3" USE_IAM_OPTIONAL_FLAG="$4"
   local SERVICE_BACKUP_ROOT="$PLUGIN_DATA_ROOT/$SERVICE/backup"
   local BACKUP_ENCRYPTION_CONFIG_ROOT="$PLUGIN_DATA_ROOT/$SERVICE/backup-encryption"
   local AWS_ACCESS_KEY_ID_FILE="$SERVICE_BACKUP_ROOT/AWS_ACCESS_KEY_ID"
@@ -194,7 +194,7 @@ service_backup() {
   docker inspect "$ID" &>/dev/null || dokku_log_fail "Service container does not exist"
   is_container_status "$ID" "Running" || dokku_log_fail "Service container is not running"
 
-  (service_export "$SERVICE" >"${TMPDIR}/export")
+  (service_export "$SERVICE" "$DATABASE_NAME" >"${TMPDIR}/export")
 
   # Build parameter list for s3backup tool
   BACKUP_PARAMETERS="$BACKUP_PARAMETERS -e BUCKET_NAME=$BUCKET_NAME"

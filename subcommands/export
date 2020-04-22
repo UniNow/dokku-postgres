@@ -11,6 +11,7 @@ service-export-cmd() {
   #E you can redirect this output to a file
   #E dokku $PLUGIN_COMMAND_PREFIX:export lolipop > lolipop.dump
   #A service, service to run command against
+  #F database, database to backup
   declare desc="export a dump of the $PLUGIN_SERVICE service database"
   local cmd="$PLUGIN_COMMAND_PREFIX:export" argv=("$@")
   [[ ${argv[0]} == "$cmd" ]] && shift 1
@@ -19,7 +20,7 @@ service-export-cmd() {
 
   [[ -z "$SERVICE" ]] && dokku_log_fail "Please specify a valid name for the service"
   verify_service_name "$SERVICE"
-  service_export "$SERVICE"
+  service_export "$SERVICE" "$2"
 }
 
 service-export-cmd "$@"
